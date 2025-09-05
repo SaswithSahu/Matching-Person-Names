@@ -16,9 +16,9 @@ The system allows users to input a name and find the **closest matches** from a 
 ---
 
 ## 📂 Project Structure
-project/
-│── index.py # Flask backend
-│── templates/
-│ └── index.html # Frontend (HTML + JS)
-│── requirements.txt # Python dependencies
-│── README.md # Project documentation
+  project/
+  │── index.py # Flask backend
+  │── templates/
+  │ └── index.html # Frontend (HTML + JS)
+  │── requirements.txt # Python dependencies
+  │── README.md # Project documentation
