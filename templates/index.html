@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Name Matcher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 100px auto;
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      text-align: left;
+    }
+    .match-box {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-left: 4px solid #007BFF;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    .best {
+      background: #eaf4ff;
+      border-left: 4px solid #28a745;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Name Matcher</h1>
+    <input type="text" id="nameInput" placeholder="Enter a name...">
+    <br>
+    <button onclick="matchName()">Find Matches</button>
+    
+    <div id="results" class="result"></div>
+  </div>
+
+  <script>
+    async function matchName() {
+      const name = document.getElementById("nameInput").value;
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "<p>Searching...</p>";
+
+      try {
+        const response = await fetch("/match_name", {
+          method: "POST",
+          mode: "cors",
+          headers: { 
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+         },
+          body: JSON.stringify({ name: name })
+        });
+        
+        const data = await response.json();
+
+        if (data.error) {
+          resultsDiv.innerHTML = `<p style="color:red;">${data.error}</p>`;
+          return;
+        }
+
+        let html = `
+          <div class="match-box best">
+            <strong>Best Match:</strong> ${data.best_match.name} 
+            <br>Score: ${data.best_match.score}
+          </div>
+        `;
+
+        if (data.other_matches.length > 0) {
+          html += `<h3>Other Matches:</h3>`;
+          data.other_matches.forEach(match => {
+            html += `
+              <div class="match-box">
+                ${match.name} <br>Score: ${match.score}
+              </div>
+            `;
+          });
+        }
+
+        resultsDiv.innerHTML = html;
+
+      } catch (err) {
+        resultsDiv.innerHTML = `<p style="color:red;">Error: ${err}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
