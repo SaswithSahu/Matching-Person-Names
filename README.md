@@ -22,3 +22,14 @@ The system allows users to input a name and find the **closest matches** from a 
   │ └── index.html # Frontend (HTML + JS)
   │── requirements.txt # Python dependencies
   │── README.md # Project documentation
+
+  
+---
+
+## ⚙️ Setup Instructions
+
+### 1️⃣ Clone Repository
+```bash
+git clone https://github.com/yourusername/name-matcher.git
+cd name-matcher
+
